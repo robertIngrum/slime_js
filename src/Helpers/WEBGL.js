@@ -63,4 +63,4 @@ class WEBGL {
 	}
 }
 
-export { WEBGL };
+export default WEBGL;
