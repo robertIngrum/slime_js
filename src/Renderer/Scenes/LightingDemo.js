@@ -1,21 +1,7 @@
 import * as THREE from "three";
 import oc from 'three-orbit-controls';
 import * as dat from 'dat.gui';
-
-class ColorGUIHelper {
-  constructor(object, prop) {
-    this.object = object;
-    this.prop   = prop;
-  }
-
-  get value() {
-    return `#${this.object[this.prop].getHexString()}`;
-  }
-
-  set value(hexString) {
-    this.object[this.prop].set(hexString);
-  }
-}
+import ColorGUIHelper from "../../Helpers/ColorGUIHelper";
 
 class LightingDemo {
   constructor() {

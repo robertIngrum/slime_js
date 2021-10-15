@@ -1,16 +1,15 @@
 import WEBGL from "./Helpers/WEBGL";
-import LightingDemo from "./Renderer/Scenes/LightingDemo";
+import Slime from "./Renderer/Scenes/Slime";
 
 class App {
   static start() {
-    console.log('static start');
-    if (WEBGL.isWebGLAvailable()) {
-      const program = new LightingDemo();
-      program.animate();
-    } else {
+    if (!WEBGL.isWebGLAvailable()) {
       const warning = WEBGL.getWebGLErrorMessage();
       document.getElementById('container').appendChild(warning);
+      return;
     }
+
+    Slime.run();
   }
 }
 
