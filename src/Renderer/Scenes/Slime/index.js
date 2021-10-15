@@ -43,28 +43,29 @@ class Slime {
     this.gui.add(this.camera.position, 'y', -100, 100);
     this.gui.add(this.camera.position, 'z', -100, 100);
 
-    const sprite = new Sprite({
-      velocity: { x: 10.0, y: -5.0 },
-      accelerationFunction: this.spriteAccFunction
-    });
-    this.scene.add(sprite.mesh);
-    this.updatables.push(sprite);
-    
-    const sprite2 = new Sprite({
-      velocity: { x: -13.0, y: -1.0 },
-      accelerationFunction: this.spriteAccFunction
-    });
-    this.scene.add(sprite2.mesh);
-    this.updatables.push(sprite2);
-    
-    const sprite3 = new Sprite({
-      velocity: { x: -8.0, y: 7.0 },
-      accelerationFunction: this.spriteAccFunction
-    });
-    this.scene.add(sprite3.mesh);
-    this.updatables.push(sprite3);
+    this.spawnSprite({ count: 3 });
     
     this.animate();
+  }
+
+  spawnSprite({ count, velocity, accelerationFunction }) {
+    count ||= 1;
+    velocity ||= 10;
+    let degrees = 0;
+    const dDegrees = 360 / count;
+
+    for (let i = 0; i < count; i++) {
+      const sprite = new Sprite({
+        velocity: velocity,
+        angle: degrees * Math.PI/180,
+        accelerationFunction: this.spriteBounceFunction,
+      });
+
+      this.scene.add(sprite.mesh);
+      this.updatables.push(sprite);
+
+      degrees += dDegrees;
+    }
   }
 
   animate() {
@@ -84,7 +85,34 @@ class Slime {
     }
   }
 
-  spriteAccFunction({x, y}) {
+  spriteBounceFunction(sprite) {
+    const x = sprite.mesh.position.x;
+    const y = sprite.mesh.position.y;
+
+    const bounds = 10;
+
+    if ((x < bounds && x > -bounds) &&
+        (y < bounds && y > -bounds)) {
+      return { x: 0, y: 0 };
+    }
+
+    const speed = 10;
+    const angle = Math.floor(Math.random() * 90) * Math.PI / 180;
+
+    const velocity = {
+      x: Math.sin(angle) * speed,
+      y: Math.cos(angle) * speed,
+    };
+
+    if (x >= bounds) { velocity.x *= -1 }
+    if (y >= bounds) { velocity.y *= -1 }
+
+    sprite.currentVelocity = velocity;
+
+    return { x: 0, y: 0 };
+  }
+
+  spriteGravFunction({x, y}) {
     const acc = .5;
 
     if (x === 0 && y === 0) {

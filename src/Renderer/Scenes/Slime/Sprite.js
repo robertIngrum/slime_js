@@ -4,10 +4,12 @@ class Sprite {
   currentVelocity;
   #mesh = null;
 
-  constructor({ velocity, accelerationFunction }) {
+  constructor({ velocity, angle, accelerationFunction }) {
+    velocity ||= 10.0;
+
     this.currentVelocity = {
-      x: velocity?.x || 0.0,
-      y: velocity?.y || 0.0,
+      x: Math.sin(angle) * velocity,
+      y: Math.cos(angle) * velocity,
     };
     this.accelerationFunction = accelerationFunction;
   }
@@ -64,7 +66,7 @@ class Sprite {
   }
 
   tick(dTime) {
-    const dPos = this.accelerationFunction({ x: this.mesh.position.x, y: this.mesh.position.y });
+    const dPos = this.accelerationFunction(this);
 
     this.currentVelocity.x += dPos.x;
     this.currentVelocity.y += dPos.y;
