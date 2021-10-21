@@ -11,6 +11,7 @@ class Slime {
   camera;
   updatables = [];
   clock;
+  speed = 10;
 
   static run() {
     const program = new Slime();
@@ -42,6 +43,7 @@ class Slime {
     this.gui.add(this.camera.position, 'x', -100, 100);
     this.gui.add(this.camera.position, 'y', -100, 100);
     this.gui.add(this.camera.position, 'z', -100, 100);
+    this.gui.add(this, 'speed', 0, 100);
 
     this.spawnSprite({ count: 3 });
     
@@ -59,6 +61,7 @@ class Slime {
         velocity: velocity,
         angle: degrees * Math.PI/180,
         accelerationFunction: this.spriteBounceFunction,
+        program: this,
       });
 
       this.scene.add(sprite.mesh);
@@ -96,12 +99,11 @@ class Slime {
       return { x: 0, y: 0 };
     }
 
-    const speed = 10;
     const angle = Math.floor(Math.random() * 90) * Math.PI / 180;
 
     const velocity = {
-      x: Math.sin(angle) * speed,
-      y: Math.cos(angle) * speed,
+      x: Math.sin(angle) * this.program.speed,
+      y: Math.cos(angle) * this.program.speed,
     };
 
     if (x >= bounds) { velocity.x *= -1 }

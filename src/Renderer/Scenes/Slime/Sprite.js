@@ -1,11 +1,14 @@
 import * as THREE from "three";
 
 class Sprite {
+  program;
   currentVelocity;
   #mesh = null;
 
-  constructor({ velocity, angle, accelerationFunction }) {
+  constructor({ velocity, angle, accelerationFunction, program }) {
     velocity ||= 10.0;
+
+    this.program = program;
 
     this.currentVelocity = {
       x: Math.sin(angle) * velocity,
